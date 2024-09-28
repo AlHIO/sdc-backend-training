@@ -17,22 +17,26 @@ async def root():
 
 # http://localhost:8080/users
 
-class UserId(int, Enum):
-    Alice = 1
-    Bob = 2
-    Eve = 3
+# class UserId(int, Enum):
+#     Alice = 1
+#     Bob = 2
+#     Eve = 3
 
-@app.get("/users/{user_id}")
-async def get_users(user_id: UserId):
-    if user_id is UserId.Alice:
-        return {"user_id": user_id, "user_info": "Alice"}
-    if user_id.value == 2:
-        return {"user_id": user_id, "user_info": "Bob"}
+# @app.get("/users/{user_id}")
+# async def get_users(user_id: UserId, q: int=10):
+#     if user_id is UserId.Alice:
+#         return {"user_id": user_id, "user_info": "Alice"}
+#     if user_id.value == 2:
+#         return {"user_id": user_id, "user_info": "Bob"}
     
-    return{"user_id": user_id, "user_info": ""}
+#     return{"user_id": user_id, "user_info": ""}
 
 # http://localhost:8080/users/{user_id}
 
-@app.get("/files/{file_path:path}")
-async def read_file(file_path: str):
-    return {"file_path": file_path}
+# @app.get("/files/{file_path:path}")
+# async def read_file(file_path: str):
+#     return {"file_path": file_path}
+
+@app.get("/users/{user_id}/items/{item_id}")
+async def get_user(user_id: int, item_id: int, q1: int = 10, q2: int = 1):
+    return {"user_id": user_id,"item_id": item_id, "q1": q1, "q2": q2}
