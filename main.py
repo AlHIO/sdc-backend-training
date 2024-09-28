@@ -1,15 +1,16 @@
 from fastapi import FastAPI, Query # type: ignore
-from typing import Annotated
+from pydantic import BaseModel
+# from typing import Annotated
 
 # from enum import Enum
 
 app = FastAPI()
 
-# class Item(BaseModel):
-#     name: str
-#     description: str | None = None
-#     price: float
-#     tax: float | None = None
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
 
 
 # http://localhost:8080
@@ -17,12 +18,29 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
-@app.get("/items/")
-async def read_items(q: Annotated[str | None, Query(max_length=5)] = None):
-    results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+@app.put("/items/{item_id}")
+async def update_item(item_id: int, 
+                      item: Item, 
+                      q: str | None = None):
+    result = {"item_id": item_id, **item.dict()}
     if q:
-        results.update({"q": q})
-    return results
+        result.update({"q": q})
+    return result
+
+
+
+# @app.get("/items/")
+# async def read_items(item_query: Annotated[str | None, 
+#                                   Query(
+#                                       title="ABCD",
+#                                       description="This is",
+#                                       alias="item-query",
+#                                       deprecated=True                                 
+#                                         )] = None):
+#     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+#     if item_query:
+#         results.update({"item_query": item_query})
+#     return results
 
 # # http://localhost:8080/items/{item_id}?q={q}
 
