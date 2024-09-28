@@ -1,15 +1,15 @@
-from fastapi import FastAPI # type: ignore
-from pydantic import BaseModel
+from fastapi import FastAPI, Query # type: ignore
+from typing import Annotated
 
 # from enum import Enum
 
 app = FastAPI()
 
-class Item(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-    tax: float | None = None
+# class Item(BaseModel):
+#     name: str
+#     description: str | None = None
+#     price: float
+#     tax: float | None = None
 
 
 # http://localhost:8080
@@ -18,7 +18,7 @@ async def root():
     return {"message": "Hello World"}
 
 @app.get("/items/")
-async def read_items(q: str | None = None):
+async def read_items(q: Annotated[str | None, Query(max_length=5)] = None):
     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
     if q:
         results.update({"q": q})
