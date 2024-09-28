@@ -32,3 +32,7 @@ async def get_users(user_id: UserId):
     return{"user_id": user_id, "user_info": ""}
 
 # http://localhost:8080/users/{user_id}
+
+@app.get("/files/{file_path:path}")
+async def read_file(file_path: str):
+    return {"file_path": file_path}
