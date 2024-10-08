@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Query # type: ignore
 from pydantic import BaseModel
-# from typing import Annotated
+from typing import Annotated
 
 # from enum import Enum
 
@@ -12,11 +12,16 @@ class Item(BaseModel):
     price: float
     tax: float | None = None
 
+# GET /items/{item_id} Endpoint 
+@app.get("/items/{item_id}")
+async def read_items(
+    q: Annotated[str | None, Query(min_length=3, max_length=50)] = None,
+):
+    results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+    if q:
+        results.update({"q": q})
+    return results
 
-# http://localhost:8080
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
 
 @app.put("/items/{item_id}")
 async def update_item(item_id: int, 
@@ -27,7 +32,10 @@ async def update_item(item_id: int,
         result.update({"q": q})
     return result
 
-
+# http://localhost:8080
+# @app.get("/")
+# async def root():
+#     return {"message": "Hello World"}
 
 # @app.get("/items/")
 # async def read_items(item_query: Annotated[str | None, 
