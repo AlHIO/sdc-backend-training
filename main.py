@@ -9,6 +9,8 @@ app = FastAPI()
 
 
 class Item(BaseModel):
+    name: str
+    description: str
     price: float
     tax: float| None = None
 
@@ -44,10 +46,12 @@ async def read_items(
 
 
 @app.put("/items/{item_id}")
-async def update_item(item_id: Annotated[Decimal, Path(ge=1, le=1000, description="Item ID must be between 1 and 1000.")], 
+async def update_item(
+                      item_id: Annotated[Decimal, Path(ge=1, le=1000, description="Item ID must be between 1 and 1000.")], 
                       item: Item = None, 
-                      q: Annotated[str | None, Query(min_length=3, max_length=50, description="Query 'q' must be between 3 and 50 characters.")] = None):
-    result = {"item_id": item_id, **item.model_dump()}
+                      q: Annotated[str | None, Query(min_length=3, max_length=50, description="Query 'q' must be between 3 and 50 characters.")] = None
+                      ):
+    result = {"item_id": item_id, **item.dict()}
     if q:
         result.update({"q": q})
     return result
