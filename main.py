@@ -18,6 +18,10 @@ class SortOrder(str, Enum):
     asc = "asc"
     desc = "desc"
 
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
 # GET /items/{item_id} Endpoint 
 @app.get("/items/{item_id}")
 async def read_items(
